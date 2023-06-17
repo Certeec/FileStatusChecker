@@ -15,7 +15,7 @@ namespace FileStatusCheckerApplication.FileChecker
             return files;
         }
 
-        public Dictionary<string, string> HashFiles(string[] files)
+        public Dictionary<string, string> HashFiles(IEnumerable<string> files)
         {
             Dictionary<string, string> listOfFilesHashed = new Dictionary<string, string>();
             foreach(var file in files)

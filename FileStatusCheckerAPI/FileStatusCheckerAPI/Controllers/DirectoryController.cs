@@ -18,9 +18,9 @@ namespace FileStatusCheckerAPI.Controllers
         }
 
         [HttpPost("Directory")]
-        public ActionResult SetFileDirectory([FromBody]string directory)
+        public ActionResult SetFileDirectory([FromBody] DirectoryInputDTO directory)
         {
-            _fileService.SaveHistoricalFile(directory);
+            _fileService.SaveHistoricalFile(directory.Directory);
             return Ok();
         }
 

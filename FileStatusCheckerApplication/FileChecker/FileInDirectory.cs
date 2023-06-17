@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FileStatusCheckerApplication.FileChecker
 {
-    public interface IFileDirectionChecker 
+    public class FileInDirectory
     {
-        string[] GetListOfAllFilesInDirectiory(string directoryPath);
-        Dictionary<string, string> HashFiles(IEnumerable<string> files);
+        public string Path { get; set; }
+        public string HashedValue { get; set; }
     }
 }
