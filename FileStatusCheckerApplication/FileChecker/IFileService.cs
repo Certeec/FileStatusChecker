@@ -9,6 +9,6 @@ namespace FileStatusCheckerApplication.FileChecker
     public interface IFileService
     {
         void SaveHistoricalFile(string path);
-        Dictionary<string, char> CheckIfFilesChanged();
+        Dictionary<string, FileStatus> CheckIfFilesChanged();
     }
 }

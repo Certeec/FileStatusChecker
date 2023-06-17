@@ -23,23 +23,23 @@ namespace FileStatusCheckerApplication.FileChecker
         {
             var result = _directionRepository.SaveDirectoryToFile(directory);
             var listOfFiles = _checker.GetListOfAllFilesInDirectiory(directory);
-            Dictionary<string,string> toSave = _checker.GetFilesHashed(listOfFiles);
+            Dictionary<string,string> toSave = _checker.HashFiles(listOfFiles);
             _historicalHandler.SaveHashedToFile(toSave);
         }
 
-        public Dictionary<string,char> CheckIfFilesChanged()
+        public Dictionary<string, FileStatus> CheckIfFilesChanged()
         {
             var path = _directionRepository.ReadDirectionFromFile();
             var historicalFileHashes = _historicalHandler.ReadHashedFiles();
-            List<string> currentList = _checker.GetListOfAllFilesInDirectiory(path);
-            var currentHashedFiles = _checker.GetFilesHashed(currentList);
+            string[] currentList = _checker.GetListOfAllFilesInDirectiory(path);
+            var currentHashedFiles = _checker.HashFiles(currentList);
             return CompareHashDictionary(historicalFileHashes, currentHashedFiles);
 
         }
 
-        private Dictionary<string, char> CompareHashDictionary(Dictionary<string,string> historical, Dictionary<string,string> current)
+        private Dictionary<string, FileStatus> CompareHashDictionary(Dictionary<string,string> historical, Dictionary<string,string> current)
         {
-            Dictionary<string, char> resultOfCheck = new Dictionary<string, char>();
+            Dictionary<string, FileStatus> resultOfCheck = new Dictionary<string, FileStatus>();
 
             foreach(var file in historical)
             {
@@ -51,7 +51,7 @@ namespace FileStatusCheckerApplication.FileChecker
                     }
                     else
                     {
-                        resultOfCheck.Add(file.Key, 'M');
+                        resultOfCheck.Add(file.Key, FileStatus.M);
                     }
 
                     current.Remove(file.Key);
@@ -59,13 +59,13 @@ namespace FileStatusCheckerApplication.FileChecker
                 }
                 else
                 {
-                    resultOfCheck.Add(file.Key, 'D');
+                    resultOfCheck.Add(file.Key, FileStatus.D);
                 }
             }
 
             foreach(var leftFiles in current)
             {
-                resultOfCheck.Add(leftFiles.Key, 'A');
+                resultOfCheck.Add(leftFiles.Key, FileStatus.A);
             }
 
             return resultOfCheck;

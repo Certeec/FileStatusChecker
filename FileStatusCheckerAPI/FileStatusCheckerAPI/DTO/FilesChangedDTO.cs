@@ -1,8 +1,10 @@
-﻿namespace FileStatusCheckerAPI.DTO
+﻿using FileStatusCheckerApplication.FileChecker;
+
+namespace FileStatusCheckerAPI.DTO
 {
     public class FilesChangedDTO
     {
-        public string filePath { get; set; }
-        public char action { get; set; }
+        public string FilePath { get; set; }
+        public FileStatus Action { get; set; }
     }
 }

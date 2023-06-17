@@ -9,13 +9,13 @@ namespace FileStatusCheckerApplication.FileChecker
 {
     public class FileDirectionChecker : IFileDirectionChecker
     {
-        public List<string> GetListOfAllFilesInDirectiory(string directoryPath)
+        public string[] GetListOfAllFilesInDirectiory(string directoryPath)
         {
             string[] files = Directory.GetFiles(directoryPath);
-            return files.ToList();
+            return files;
         }
 
-        public Dictionary<string, string> GetFilesHashed(List<string> files)
+        public Dictionary<string, string> HashFiles(string[] files)
         {
             Dictionary<string, string> listOfFilesHashed = new Dictionary<string, string>();
             foreach(var file in files)

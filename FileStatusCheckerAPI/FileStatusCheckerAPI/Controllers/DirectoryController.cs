@@ -17,8 +17,8 @@ namespace FileStatusCheckerAPI.Controllers
             _fileService = fileService;
         }
 
-        [HttpPost("{directory}")]
-        public ActionResult SetFileDirectory(string directory)
+        [HttpPost("Directory")]
+        public ActionResult SetFileDirectory([FromBody]string directory)
         {
             _fileService.SaveHistoricalFile(directory);
             return Ok();
@@ -28,7 +28,7 @@ namespace FileStatusCheckerAPI.Controllers
         public ActionResult CheckIfFileChanged()
         {
             var result = _fileService.CheckIfFilesChanged();
-            List<FilesChangedDTO> final = result.Select(n => new FilesChangedDTO() { filePath = n.Key, action = n.Value }).ToList();
+            List<FilesChangedDTO> final = result.Select(n => new FilesChangedDTO() { FilePath = n.Key, Action = n.Value }).ToList();
                 
             return Ok(final);
         }

@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace FileStatusCheckerApplication.FileChecker
 {
-    public interface IFileDirectionChecker 
+    public enum FileStatus : byte
     {
-        string[] GetListOfAllFilesInDirectiory(string directoryPath);
-        Dictionary<string, string> HashFiles(string[] files);
+        A,
+        M,
+        D
     }
 }

@@ -15,7 +15,7 @@ namespace FileStatusCheckerApplication.UnitTests
             string forTest = "C:\\Users\\AiutJeKokot\\Desktop\\Repozytorium\\FileStatusChecker\\FileStatusCheckerApplication\\TempFiles";
             FileDirectionChecker checker = new FileDirectionChecker();
             var result = checker.GetListOfAllFilesInDirectiory(forTest);
-            var dict = checker.GetFilesHashed(result);
+            var dict = checker.HashFiles(result);
         }
     }
 }
