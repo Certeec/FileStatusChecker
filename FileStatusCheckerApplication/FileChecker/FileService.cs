@@ -1,4 +1,4 @@
-﻿using FileStatusCheckerApplication.TempFileOperators;
+﻿using FileStatusCheckerApplication.Memory;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,73 +10,86 @@ namespace FileStatusCheckerApplication.FileChecker
 {
     public class FileService : IFileService
     {
-        private readonly IFileDirectionChecker _checker;
-        private readonly IHistoricalFileHandler _historicalHandler;
-        private readonly IFileDirectionRepository _directionRepository;
-        public FileService(IFileDirectionChecker checker, IHistoricalFileHandler handler, IFileDirectionRepository fileDirectionRepository)
+        private readonly IFileManager _fileManager;
+        private readonly IMemoryDatabase _memoryDatabase;
+        public FileService(IFileManager checker, IMemoryDatabase memoryDatabase)
         {
-            _checker = checker;
-            _historicalHandler = handler;
-            _directionRepository = fileDirectionRepository;
+            _fileManager = checker;;
+            _memoryDatabase = memoryDatabase;
         }
-        public void SaveHistoricalFile(string directory)
+        public void SaveHistoricalFile(string directoryPath)
         {
-            var result = _directionRepository.SaveDirectoryToFile(directory);
-            var listOfFiles = _checker.GetListOfAllFilesInDirectiory(directory);
-            Dictionary<string,string> toSave = _checker.HashFiles(listOfFiles);
-            _historicalHandler.SaveHashedToFile(toSave);
-        }
+            FilesDirectory directory = new FilesDirectory(directoryPath);
 
-        public Dictionary<string, FileStatus> CheckIfFilesChanged()
-        {
-            var path = _directionRepository.ReadDirectionFromFile();
-            var historicalFileHashes = _historicalHandler.ReadHashedFiles();
-            string[] currentList = _checker.GetListOfAllFilesInDirectiory(path);
-            var currentHashedFiles = _checker.HashFiles(currentList);
-            return CompareHashDictionary(historicalFileHashes, currentHashedFiles);
-
+            var listOfFiles = _fileManager.GetListOfAllFilesInDirectiory(directoryPath);
+            directory.File = _fileManager.HashFiles(listOfFiles);
+            _memoryDatabase.AllDirectories.Add(directory);
         }
 
-        private Dictionary<string, FileStatus> CompareHashDictionary(Dictionary<string,string> historical, Dictionary<string,string> current)
+        public List<FileChanges> CheckIfFilesChanged(string path)
         {
-            Dictionary<string, FileStatus> resultOfCheck = new Dictionary<string, FileStatus>();
+            FilesDirectory directory = _memoryDatabase.AllDirectories.Single(n => n.Path == path);
+
+            string[] currentList = _fileManager.GetListOfAllFilesInDirectiory(path);
+            List<FileInDirectory> currentHashedFiles = _fileManager.HashFiles(currentList);
+            var comparisonList = CompareHashedLists(directory.File, currentHashedFiles, directory.DirectoryVersion);
+
+            directory.ChangesInFiles.AddRange(comparisonList);
+            directory.File = currentHashedFiles;
+            directory.DirectoryVersion++;
+
+            return directory.ChangesInFiles;
+
+        }
+
+        private List<FileChanges> CompareHashedLists(List<FileInDirectory> historical, List<FileInDirectory> current, int version)
+        {
+            List<FileInDirectory> currentList = current.ToList();
+            //there i will be deleting content from current... Does it mean that i have to copy list like i did at top?
+            // otherwise i would be modifying list "Current"?
+            List<FileChanges> filesChanged = new List<FileChanges>();
 
             foreach(var file in historical)
             {
-                if(current.ContainsKey(file.Key))
+               var foundFile = currentList.SingleOrDefault(n => n.Path == file.Path);
+                if (foundFile != null)
                 {
-                    if (current[file.Key].Contains(file.Value))
+                    if (foundFile.HashedValue != file.HashedValue)
                     {
-
+                        filesChanged.Add(new FileChanges()
+                        {
+                            FilePath = file.Path,
+                            Action = FileStatus.M,
+                            Version = version
+                        }); ;
                     }
                     else
                     {
-                        resultOfCheck.Add(file.Key, FileStatus.M);
+                        currentList.Remove(foundFile);
                     }
-
-                    current.Remove(file.Key);
-
                 }
                 else
                 {
-                    resultOfCheck.Add(file.Key, FileStatus.D);
+                    filesChanged.Add(new FileChanges()
+                    {
+                        FilePath = file.Path,
+                        Action = FileStatus.D,
+                        Version = version
+                    });
                 }
             }
 
-            foreach(var leftFiles in current)
+            foreach(var file in currentList)
             {
-                resultOfCheck.Add(leftFiles.Key, FileStatus.A);
+                filesChanged.Add(new FileChanges()
+                {
+                    FilePath = file.Path,
+                    Action = FileStatus.A,
+                    Version = version
+                });
             }
 
-            return resultOfCheck;
-
-            //Tbh i`m not happy with this function.. but it works
-
-        }
-
-        private void CompareVaules()
-        {
-            
+            return filesChanged;
         }
     }
 }

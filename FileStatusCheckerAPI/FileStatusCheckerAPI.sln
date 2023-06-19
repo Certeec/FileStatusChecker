@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileStatusCheckerAPI", "FileStatusCheckerAPI\FileStatusCheckerAPI.csproj", "{D800A325-BE02-449D-95CC-46FFFDB0098E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileStatusCheckerAPI", "FileStatusCheckerAPI\FileStatusCheckerAPI.csproj", "{D800A325-BE02-449D-95CC-46FFFDB0098E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileStatusCheckerApplication", "..\FileStatusCheckerApplication\FileStatusCheckerApplication.csproj", "{BB045DBF-27F4-41B0-8408-7087D0E21604}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileStatusCheckerApplication.UnitTests", "..\FileStatusCheckerApplication.UnitTests\FileStatusCheckerApplication.UnitTests.csproj", "{837C1B6C-54CD-45F7-9D12-1266503D0730}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileStatusCheckerApplication", "..\FileStatusCheckerApplication\FileStatusCheckerApplication.csproj", "{BB045DBF-27F4-41B0-8408-7087D0E21604}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{BB045DBF-27F4-41B0-8408-7087D0E21604}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB045DBF-27F4-41B0-8408-7087D0E21604}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB045DBF-27F4-41B0-8408-7087D0E21604}.Release|Any CPU.Build.0 = Release|Any CPU
-		{837C1B6C-54CD-45F7-9D12-1266503D0730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{837C1B6C-54CD-45F7-9D12-1266503D0730}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{837C1B6C-54CD-45F7-9D12-1266503D0730}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{837C1B6C-54CD-45F7-9D12-1266503D0730}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

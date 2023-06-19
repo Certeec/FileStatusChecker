@@ -4,31 +4,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using System.IO;
 
 namespace FileStatusCheckerApplication.FileChecker
 {
-    public class FileDirectionChecker : IFileDirectionChecker
+    public class FileManager : IFileManager
     {
         public string[] GetListOfAllFilesInDirectiory(string directoryPath)
         {
-            string[] files = Directory.GetFiles(directoryPath);
+            string[] files = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
             return files;
         }
 
-        public Dictionary<string, string> HashFiles(IEnumerable<string> files)
+        public List<FileInDirectory> HashFiles(IEnumerable<string> files)
         {
-            Dictionary<string, string> listOfFilesHashed = new Dictionary<string, string>();
+            List<FileInDirectory> listOfFiles = new List<FileInDirectory>();
             foreach(var file in files)
             {
                 using (var md5 = MD5.Create())
                 {
                     using (var stream = File.OpenRead(file))
                     {
-                        listOfFilesHashed.Add(file, Encoding.Default.GetString(md5.ComputeHash(stream)));
+                        FileInDirectory fileInDirectory = new FileInDirectory(file,
+                           Encoding.Default.GetString(md5.ComputeHash(stream)),
+                           1);
+                        listOfFiles.Add(fileInDirectory);
                     }
                 }
             }
-            return listOfFilesHashed;
+
+            return listOfFiles;
         }
     }
 }
