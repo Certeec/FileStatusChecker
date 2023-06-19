@@ -10,14 +10,15 @@ namespace FileStatusCheckerApplication.FileChecker
 {
     public class FileManager : IFileManager
     {
-        public string[] GetListOfAllFilesInDirectiory(string directoryPath)
+        private string[] GetListOfAllFilesInDirectiory(string directoryPath)
         {
             string[] files = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
             return files;
         }
 
-        public List<FileInDirectory> HashFiles(IEnumerable<string> files)
+        public List<FileInDirectory> HashFilesInPath(string path)
         {
+            var files = GetListOfAllFilesInDirectiory(path);
             List<FileInDirectory> listOfFiles = new List<FileInDirectory>();
             foreach(var file in files)
             {

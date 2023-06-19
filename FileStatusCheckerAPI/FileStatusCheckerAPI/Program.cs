@@ -11,7 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IFileService, FileService>();
 builder.Services.AddTransient<IFileManager, FileManager>();
-builder.Services.AddSingleton<IMemoryDatabase, MemoryDatabase>();
+builder.Services.AddSingleton<IDatabase, MemoryDatabase>();
+builder.Services.AddTransient<IDirectoryRepository, DirectoryRepository>();
 
 var app = builder.Build();
 

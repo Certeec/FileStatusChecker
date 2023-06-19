@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FileStatusCheckerApplication.Memory
 {
-    public interface IMemoryDatabase
+    public interface IDatabase
     {
         List<FilesDirectory> AllDirectories { get; set; }
     }
