@@ -31,15 +31,11 @@ namespace FileStatusCheckerApplication.FileChecker
 
             List<FileInDirectory> currentHashedFiles = _fileManager.HashFilesInPath(directoryPath);
 
-            List<FileChanges> editedFiles = directory.TrackChangedFiles(currentHashedFiles);
-
-            directory.ChangesInFiles.AddRange(editedFiles);
-            directory.File = currentHashedFiles;
-            directory.DirectoryVersion++;
+            List<FileChanges> filesEditHistory = directory.TrackChangedFiles(currentHashedFiles);
 
             _directoryRepository.UpdateDirectory(directory);
 
-            return directory.ChangesInFiles;
+            return filesEditHistory;
 
         }
     }   

@@ -18,8 +18,12 @@ namespace FileStatusCheckerApplication.FileChecker
 
         public List<FileChanges> TrackChangedFiles(List<FileInDirectory> current)
         {
+            DirectoryVersion++;
+            var result = CompareHashedLists(File, current, DirectoryVersion);
+            File = current;
+            ChangesInFiles.AddRange(result);
 
-            return CompareHashedLists(File, current, DirectoryVersion);
+            return ChangesInFiles;
         }
 
         private List<FileChanges> CompareHashedLists(List<FileInDirectory> historical, List<FileInDirectory> current, int version)
